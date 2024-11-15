@@ -1,32 +1,40 @@
 # Renergy Hub Go Backend API
 
+This is the notification service for Renergyhub built in Go
+
 ## Project Overview
 
-Live link: is at http://
+Live link: is at http://renergyhub.osinachi.me
 
-Doc link: https://
+Doc link: https://renergyhub.osinachi.me/api/docs/index.html
 
 ## Installation Instructions
 ### Prerequisites
 
 Before setting up the project locally, ensure you have the following prerequisites installed:
 
-- [Node.js](https://nodejs.org) (>=20.14.0).
+- [Go](https://go.dev/dl/) (>=1.20).
 - A Database System (e.g., PostgreSQL, MySQL, SQLite)
 
 ### How to run API Locally
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/InternPulse/property-hive-backend-two.git
+git clone https://github.com/InternPulse/renergy-hub-go-backend.git
 ```
 
 2. Change into the parent directory:
 ```bash
-cd property-hive-backend-two
+cd renergy-hub-go-backend
 ```
 
-3. Set appropriate values for the following Compulsory Environment Variables:
+3. Create the .env file from the .env.example file
+
+```sh
+cp .env.example .env
+```
+
+4. Set appropriate values for the following Compulsory Environment Variables in the .env file:
 ```txt
 # Postgres connection string
 POSTGRES_DSN=""
@@ -36,17 +44,17 @@ JWTKEY=""
 PORT=5000
 ```
 
-4. Install the App dependencies:
+5. Install the App dependencies:
 ``` bash
-npm install
+go get
 ```
 
 5. Start the App:
 ```bash
-npm run start-server
+go run main.go
 ```
 
-The API should now be running locally at [http://localhost:5000/](http://localhost:5000/).
+The API should now be running locally at [http://localhost:7500/](http://localhost:7500/).
 
 
 # Commit Standards
