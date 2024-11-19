@@ -13,6 +13,7 @@ import (
 
 	"github.com/internpulse/renergy-hub-go-backend/config"
 	"github.com/internpulse/renergy-hub-go-backend/middlewares"
+	"github.com/internpulse/renergy-hub-go-backend/routes"
 
 	"github.com/gin-gonic/gin"
 
@@ -28,7 +29,7 @@ func main() {
 	}
 
 	r := gin.Default()
-	// routes.RegisterRoutes(r)
+	routes.RegisterRoutes(r)
 
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
