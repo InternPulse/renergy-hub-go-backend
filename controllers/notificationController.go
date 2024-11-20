@@ -44,6 +44,7 @@ func GetNotifications(db *sql.DB, singleUser bool) gin.HandlerFunc {
 // @Success 201 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
 // @Router /api/v1/notifications [post]
+// @Security BearerAuth
 func CreateNotification(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req struct {
@@ -73,7 +74,8 @@ func CreateNotification(db *sql.DB) gin.HandlerFunc {
 // @Success 200 {object} map[string]string
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
-// @Router /api/v1/notifications [patch]
+// @Router /api/v1/notifications/read [patch]
+// @Security BearerAuth
 func ReadNotification(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
@@ -101,6 +103,7 @@ func ReadNotification(db *sql.DB) gin.HandlerFunc {
 // @Summary Delete a notification
 // @Tags Notifications
 // @Router /api/v1/notifications [delete]
+// @Security BearerAuth
 func DeleteNotification(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")

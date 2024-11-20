@@ -2,7 +2,6 @@ package services
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/internpulse/renergy-hub-go-backend/models"
@@ -77,7 +76,6 @@ func CreateNotification(db *sql.DB, userID uint, title, message string) (models.
               VALUES ($1, $2, $3, $4, $5) RETURNING id`
 	var id uint
 
-	fmt.Println(query)
 	err := db.QueryRow(query, userID, title, message, time.Now(), false).Scan(&id)
 	if err != nil {
 		return models.Notification{}, err
