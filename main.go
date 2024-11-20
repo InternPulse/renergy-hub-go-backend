@@ -3,16 +3,21 @@
 // @description API for managing notifications
 // @host {host}
 // @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/internpulse/renergy-hub-go-backend/config"
-	"github.com/internpulse/renergy-hub-go-backend/middlewares"
+	"github.com/internpulse/renergy-hub-go-backend/datastore"
+	"github.com/internpulse/renergy-hub-go-backend/middleware"
 	"github.com/internpulse/renergy-hub-go-backend/routes"
 
 	"github.com/gin-gonic/gin"
@@ -28,8 +33,13 @@ func main() {
 		log.Fatalf("Error loading configuration: %v", err)
 	}
 
+	connStr := config.GetDBConnectionString()
+	db, err := sql.Open("postgres", connStr)
+
+	datastore.InitDB(db)
+
 	r := gin.Default()
-	routes.RegisterRoutes(r)
+	routes.RegisterRoutes(r, db)
 
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
@@ -45,7 +55,7 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.Use(middlewares.LoggerMiddleware())
+	r.Use(middleware.LoggerMiddleware())
 
 	r.Run(":" + port)
 }
