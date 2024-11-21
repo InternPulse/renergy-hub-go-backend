@@ -17,22 +17,32 @@ import (
 // @Security BearerAuth
 func GetNotifications(db *sql.DB, singleUser bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var notifications interface{}
-		var err error
+		// fmt.Println(c.user)
 
-		if singleUser {
-			notifications, err = services.GetAllNotificationsForUser(db)
-			if err != nil {
-				response.Error(c, http.StatusInternalServerError, "failed to get notifications for user")
-				return
-			}
-		} else {
-			notifications, err = services.GetAllNotifications(db)
-			if err != nil {
-				response.Error(c, http.StatusInternalServerError, "failed to get notifications")
-				return
-			}
+		notifications, err := services.GetAllNotifications(db)
+		if err != nil {
+			response.Error(c, http.StatusInternalServerError, "failed to get notifications")
+			return
 		}
+		response.Success(c, http.StatusOK, "fetched notifications successfully", notifications)
+		return
+	}
+}
+
+// @Summary Get a single notification
+// @Tags Notifications
+// @Success 200 {array} map[string]interface{}
+// @Router /api/v1/notifications/:id [get]
+// @Security BearerAuth
+func GetSingleNotifications(db *sql.DB, singleUser bool) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// fmt.Println(c.user)
+		notifications, err := services.GetAllNotificationsForUser(db)
+		if err != nil {
+			response.Error(c, http.StatusInternalServerError, "failed to get notifications for user")
+			return
+		}
+
 		response.Success(c, http.StatusOK, "fetched notifications successfully", notifications)
 		return
 	}

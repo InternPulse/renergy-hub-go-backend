@@ -23,7 +23,6 @@ func RequiresAuth() gin.HandlerFunc {
 		var jwtSecretKey = os.Getenv("JWT_SECRET")
 
 		authHeader := c.GetHeader("Authorization")
-		fmt.Sprintln("authHeader, %v", authHeader)
 		if authHeader == "" {
 			response.Error(c, http.StatusUnauthorized, "Authorization header is missing")
 			c.Abort()
