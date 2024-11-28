@@ -122,3 +122,72 @@ func DeleteNotification(db *sql.DB, notificationID uint) (bool, error) {
 
 	return rowsAffected > 0, nil
 }
+
+func CreateOrderCreatedNotification(db *sql.DB, userID uint) (models.Notification, error) {
+	query := `INSERT INTO notifications (user_id, title, message, created_at, is_read) 
+              VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	var id uint
+
+	title := "Order #{orderId} created successfully"
+	message := "Your order with id #{orderId} has been created successfully. You can track your order here: "
+
+	err := db.QueryRow(query, userID, title, message, time.Now(), false).Scan(&id)
+	if err != nil {
+		return models.Notification{}, err
+	}
+
+	return models.Notification{
+		ID:        id,
+		UserID:    userID,
+		Title:     title,
+		Message:   message,
+		CreatedAt: time.Now(),
+		IsRead:    false,
+	}, nil
+}
+
+func CreateOrderShippedNotification(db *sql.DB, userID uint) (models.Notification, error) {
+	query := `INSERT INTO notifications (user_id, title, message, created_at, is_read) 
+              VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	var id uint
+
+	title := "Order #{orderId} shipped successfully"
+	message := "Your order with id #{orderId} has been shipped! You can track your order here: "
+
+	err := db.QueryRow(query, userID, title, message, time.Now(), false).Scan(&id)
+	if err != nil {
+		return models.Notification{}, err
+	}
+
+	return models.Notification{
+		ID:        id,
+		UserID:    userID,
+		Title:     title,
+		Message:   message,
+		CreatedAt: time.Now(),
+		IsRead:    false,
+	}, nil
+}
+
+func SendEmailVerificationNotification(db *sql.DB, userID uint) (models.Notification, error) {
+	query := `INSERT INTO notifications (user_id, title, message, created_at, is_read) 
+              VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	var id uint
+
+	title := "Order #{orderId} created successfully"
+	message := "Your order with id #{orderId} has been created successfully. You can track your order here: "
+
+	err := db.QueryRow(query, userID, title, message, time.Now(), false).Scan(&id)
+	if err != nil {
+		return models.Notification{}, err
+	}
+
+	return models.Notification{
+		ID:        id,
+		UserID:    userID,
+		Title:     title,
+		Message:   message,
+		CreatedAt: time.Now(),
+		IsRead:    false,
+	}, nil
+}

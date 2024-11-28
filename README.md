@@ -9,6 +9,7 @@ Live link: is at http://renergyhub.osinachi.me
 Doc link: https://renergyhub.osinachi.me/api/docs/index.html
 
 ## Installation Instructions
+
 ### Prerequisites
 
 Before setting up the project locally, ensure you have the following prerequisites installed:
@@ -19,11 +20,13 @@ Before setting up the project locally, ensure you have the following prerequisit
 ### How to run API Locally
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/InternPulse/renergy-hub-go-backend.git
 ```
 
 2. Change into the parent directory:
+
 ```bash
 cd renergy-hub-go-backend
 ```
@@ -35,6 +38,7 @@ cp .env.example .env
 ```
 
 4. Set appropriate values for the following Compulsory Environment Variables in the .env file:
+
 ```txt
 # Postgres connection string
 POSTGRES_DSN=""
@@ -45,17 +49,24 @@ PORT=5000
 ```
 
 5. Install the App dependencies:
-``` bash
+
+```bash
 go get
 ```
 
 5. Start the App:
+
 ```bash
 go run main.go
 ```
 
 The API should now be running locally at [http://localhost:7500/](http://localhost:7500/).
 
+## Features
+
+1. Send order created notification
+2. Send email verification notification
+3. Send order shipped notification
 
 # Commit Standards
 
@@ -82,8 +93,8 @@ property-hive-backend-two is open to contributions, but I recommend creating an 
 10. Ensure to describe your pull request.
 11. > If you've added code that should be tested, add some test examples.
 
-
 # Merging
+
 Under any circumstances should you merge a pull request on a specific branch to the `dev` or `main` branch
 
 ### _Commit CheatSheet_
@@ -93,13 +104,13 @@ Under any circumstances should you merge a pull request on a specific branch to 
 | feat     | Features                 | A new feature                                                                                               |
 | fix      | Bug Fixes                | A bug fix                                                                                                   |
 | docs     | Documentation            | Documentation only changes                                                                                  |
-| style    | Styles                   | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)      |
+| style    | Styles                   | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)     |
 | refactor | Code Refactoring         | A code change that neither fixes a bug nor adds a feature                                                   |
 | perf     | Performance Improvements | A code change that improves performance                                                                     |
 | test     | Tests                    | Adding missing tests or correcting existing tests                                                           |
 | build    | Builds                   | Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)         |
 | ci       | Continuous Integrations  | Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) |
-| chore    | Chores                   | Other changes that don't modify, backend or test files                                                    |
+| chore    | Chores                   | Other changes that don't modify, backend or test files                                                      |
 | revert   | Reverts                  | Reverts a previous commit                                                                                   |
 
 > _Sample Commit Messages_

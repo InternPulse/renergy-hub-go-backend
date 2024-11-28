@@ -46,7 +46,13 @@ func RequiresAuth() gin.HandlerFunc {
 		case token.Valid:
 			claims, ok := token.Claims.(jwt.MapClaims)
 			if ok {
-				c.Set("user_id", claims["user_id"])
+				if userID, ok := claims["user_id"].(float64); ok {
+					c.Set("user_id", uint(userID))
+				} else {
+					response.Error(c, http.StatusUnauthorized, "User ID is missing or not a valid number")
+					c.Abort()
+					return
+				}
 			} else {
 				response.Error(c, http.StatusUnauthorized, "An error occured while parsing the user id")
 			}
