@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -45,11 +46,22 @@ func RequiresAuth() gin.HandlerFunc {
 		switch {
 		case token.Valid:
 			claims, ok := token.Claims.(jwt.MapClaims)
+
 			if ok {
-				if userID, ok := claims["user_id"].(float64); ok {
+
+				if uID, ok := claims["userID"].(string); ok {
+					userID, _ := strconv.Atoi(uID)
 					c.Set("user_id", uint(userID))
 				} else {
 					response.Error(c, http.StatusUnauthorized, "User ID is missing or not a valid number")
+					c.Abort()
+					return
+				}
+
+				if role, ok := claims["role"].(string); ok {
+					c.Set("role", role)
+				} else {
+					response.Error(c, http.StatusUnauthorized, "User role is missing")
 					c.Abort()
 					return
 				}
