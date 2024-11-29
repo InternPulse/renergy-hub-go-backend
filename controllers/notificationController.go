@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	response "github.com/internpulse/renergy-hub-go-backend/pkg"
 	"github.com/internpulse/renergy-hub-go-backend/services"
+	"github.com/internpulse/renergy-hub-go-backend/utils"
 )
 
 // @Summary Get all notifications
@@ -50,7 +51,7 @@ func GetSingleNotifications(db *sql.DB, singleUser bool) gin.HandlerFunc {
 
 // @Summary Create a new notification
 // @Tags Notifications
-// @Param       notification body models.Notification true "Book Data"
+// @Param       notification body models.Notification true "notification data"
 // @Success 201 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
 // @Router /api/v1/notifications [post]
@@ -58,7 +59,6 @@ func GetSingleNotifications(db *sql.DB, singleUser bool) gin.HandlerFunc {
 func CreateNotification(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req struct {
-			UserID  uint   `json:"user_id"`
 			Title   string `json:"title"`
 			Message string `json:"message"`
 		}
@@ -68,7 +68,13 @@ func CreateNotification(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		notification, err := services.CreateNotification(db, req.UserID, req.Title, req.Message)
+		userId, err := utils.GetUserID(c)
+		if err != nil {
+			response.Error(c, http.StatusUnauthorized, "Failed to parse user id from JWT")
+			return
+		}
+
+		notification, err := services.CreateNotification(db, userId, req.Title, req.Message)
 		if err != nil {
 			response.Error(c, http.StatusInternalServerError, "failed to create notifications")
 			return

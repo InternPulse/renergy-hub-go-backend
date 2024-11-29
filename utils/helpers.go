@@ -28,3 +28,13 @@ func GetUserID(c *gin.Context) (uint, error) {
 		return 0, fmt.Errorf("invalid user ID type")
 	}
 }
+
+func GetGenericId(c *gin.Context, param string) (uint, error) {
+	paramStr := c.Param(param)
+	genericId := uint(0)
+	_, err := fmt.Sscanf(paramStr, "%d", &genericId)
+	if err != nil {
+		return 0, err
+	}
+	return genericId, nil
+}

@@ -19,5 +19,9 @@ func RegisterRoutes(router *gin.Engine, db *sql.DB) {
 		apiv1.POST("/notifications", controllers.CreateNotification(db))
 		apiv1.PATCH("/notifications/:id/read", controllers.ReadNotification(db))
 		apiv1.DELETE("/notifications/:id", controllers.DeleteNotification(db))
+
+		apiv1.POST("/notifications/order-created/:orderId", controllers.OrderCreatedNotification(db))
+		apiv1.POST("/notifications/order-shipped/:orderId", controllers.OrderShippedNotification(db))
+		apiv1.POST("/notifications/verify-email", controllers.EmailVerificationNotification(db))
 	}
 }
