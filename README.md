@@ -39,13 +39,15 @@ cp .env.example .env
 
 4. Set appropriate values for the following Compulsory Environment Variables in the .env file:
 
-```txt
-# Postgres connection string
-POSTGRES_DSN=""
-# Secret key for signing JWTs
-JWTKEY=""
-# API Port
-PORT=5000
+```.env
+PORT=7500
+DB_HOST="localhost"
+DB_PORT="5432"
+DB_NAME="renergybackend"
+DB_USER="renergyuser"
+DB_PASSWORD="go-is-cool"
+DB_SSL_MODE="require"
+JWT_SECRET=""
 ```
 
 5. Install the App dependencies:
