@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -17,10 +16,9 @@ func GetRole() gin.HandlerFunc {
 			log.Fatalf("Error loading configuration: %v", err)
 		}
 
-		user_id, exists := c.Get("user_id")
-		fmt.Println(user_id)
+		_, exists := c.Get("role")
 		if !exists {
-			response.Error(c, http.StatusUnauthorized, "User id not found in request. Are you authorized?")
+			response.Error(c, http.StatusUnauthorized, "role not found in request. Are you authorized?")
 		}
 
 		c.Next()

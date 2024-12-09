@@ -23,21 +23,24 @@ func RequiresAuth() gin.HandlerFunc {
 		}
 		var jwtSecretKey = os.Getenv("JWT_SECRET")
 
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			response.Error(c, http.StatusUnauthorized, "Authorization header is missing")
-			c.Abort()
-			return
-		}
+		tokenString, err := c.Cookie("jwt")
+		if err != nil || tokenString == "" {
+			authHeader := c.GetHeader("Authorization")
+			if authHeader == "" {
+				response.Error(c, http.StatusUnauthorized, "JWT not found in cookies or Authorization header")
+				c.Abort()
+				return
+			}
 
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			response.Error(c, http.StatusUnauthorized, "Authorization format is invalid")
-			c.Abort()
-			return
-		}
+			parts := strings.Split(authHeader, " ")
+			if len(parts) != 2 || parts[0] != "Bearer" {
+				response.Error(c, http.StatusUnauthorized, "Authorization format is invalid")
+				c.Abort()
+				return
+			}
 
-		tokenString := parts[1]
+			tokenString = parts[1]
+		}
 
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtSecretKey), nil
@@ -48,7 +51,6 @@ func RequiresAuth() gin.HandlerFunc {
 			claims, ok := token.Claims.(jwt.MapClaims)
 
 			if ok {
-
 				if uID, ok := claims["userID"].(string); ok {
 					userID, _ := strconv.Atoi(uID)
 					c.Set("user_id", uint(userID))
@@ -66,20 +68,26 @@ func RequiresAuth() gin.HandlerFunc {
 					return
 				}
 			} else {
-				response.Error(c, http.StatusUnauthorized, "An error occured while parsing the user id")
+				response.Error(c, http.StatusUnauthorized, "Error parsing JWT claims")
+				c.Abort()
+				return
 			}
 		case errors.Is(err, jwt.ErrTokenMalformed):
-			response.Error(c, http.StatusUnauthorized, "JWT is not correctly set in the Authorization header")
+			response.Error(c, http.StatusUnauthorized, "JWT is malformed")
 			c.Abort()
+			return
 		case errors.Is(err, jwt.ErrTokenSignatureInvalid):
-			response.Error(c, http.StatusUnauthorized, "JWT secret is invalid")
+			response.Error(c, http.StatusUnauthorized, "JWT signature is invalid")
 			c.Abort()
+			return
 		case errors.Is(err, jwt.ErrTokenExpired) || errors.Is(err, jwt.ErrTokenNotValidYet):
-			response.Error(c, http.StatusUnauthorized, "JWT has expired")
+			response.Error(c, http.StatusUnauthorized, "JWT is expired or not yet valid")
 			c.Abort()
+			return
 		default:
-			response.Error(c, http.StatusUnauthorized, fmt.Sprintf("Couldn't handle this JWT: %v", err))
+			response.Error(c, http.StatusUnauthorized, fmt.Sprintf("Error handling JWT: %v", err))
 			c.Abort()
+			return
 		}
 
 		c.Next()

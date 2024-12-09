@@ -1,6 +1,6 @@
 // @title Notification Service API
 // @version 1.0
-// @description API for managing notifications
+// @description API for managing notifications and settings
 // @host {host}
 // @BasePath /
 // @securityDefinitions.apikey BearerAuth
