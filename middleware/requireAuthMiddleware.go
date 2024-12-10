@@ -23,7 +23,7 @@ func RequiresAuth() gin.HandlerFunc {
 		}
 		var jwtSecretKey = os.Getenv("JWT_SECRET")
 
-		tokenString, err := c.Cookie("jwt")
+		tokenString, err := c.Cookie("accessToken")
 		if err != nil || tokenString == "" {
 			authHeader := c.GetHeader("Authorization")
 			if authHeader == "" {
